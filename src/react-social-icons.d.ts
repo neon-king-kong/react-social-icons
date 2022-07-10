@@ -13,6 +13,7 @@ interface SocialIconProps extends React.DetailedHTMLProps<React.AnchorHTMLAttrib
   url?: string;
   defaultSVG?: SVG;
   style?: CSSProperties;
+  disableAnchor?: boolean
 }
 declare const SocialIcon: FunctionComponent<SocialIconProps>;
 declare function keyFor(url?: string): string;
