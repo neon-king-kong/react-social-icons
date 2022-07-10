@@ -13,7 +13,7 @@ function getNetworkKey(props) {
 
 function SocialIcon(props) {
   const {
-    url, network, bgColor, fgColor, className, label, children, defaultSVG, style,
+    url, network, bgColor, fgColor, className, label, children, defaultSVG, style, disableAnchor = false,
     ...rest
   } = props
 
@@ -23,7 +23,17 @@ function SocialIcon(props) {
 
   const networkKey = getNetworkKey({ url, network })
 
-  if (props.disableAnchor) {
+  const renderIcon = () => (
+    <div className='social-container' style={socialContainer}>
+      <svg className='social-svg' style={socialSvg} viewBox='0 0 64 64'>
+        <Background />
+        <Icon networkKey={networkKey} fgColor={fgColor} />
+        <Mask networkKey={networkKey} bgColor={bgColor} />
+      </svg>
+    </div>
+  )
+
+  if (disableAnchor) {
     return (
       <div
         {...rest}
@@ -31,13 +41,7 @@ function SocialIcon(props) {
         style={{ ...socialIcon, ...style }}
         aria-label={label || networkKey}
       >
-        <div className='social-container' style={socialContainer}>
-          <svg className='social-svg' style={socialSvg} viewBox='0 0 64 64'>
-            <Background />
-            <Icon networkKey={networkKey} fgColor={fgColor} />
-            <Mask networkKey={networkKey} bgColor={bgColor} />
-          </svg>
-        </div>
+        {renderIcon()}
         {children}
       </div>
     )
@@ -50,13 +54,7 @@ function SocialIcon(props) {
         style={{ ...socialIcon, ...style }}
         aria-label={label || networkKey}
       >
-        <div className='social-container' style={socialContainer}>
-          <svg className='social-svg' style={socialSvg} viewBox='0 0 64 64'>
-            <Background />
-            <Icon networkKey={networkKey} fgColor={fgColor} />
-            <Mask networkKey={networkKey} bgColor={bgColor} />
-          </svg>
-        </div>
+        {renderIcon()}
         {children}
       </a>
     )
