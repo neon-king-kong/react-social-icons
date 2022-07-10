@@ -13,34 +13,52 @@ function getNetworkKey(props) {
 
 function SocialIcon(props) {
   const {
-    url, network, bgColor, fgColor, className, label, children, defaultSVG, style,
+    url, network, bgColor, fgColor, className, label, children, defaultSVG, style, disableAnchor = false,
     ...rest
   } = props
 
   if (typeof defaultSVG === 'object' && defaultSVG !== null) {
-    keyTo(DEFAULT_KEY, defaultSVG);
+    keyTo(DEFAULT_KEY, defaultSVG)
   }
 
   const networkKey = getNetworkKey({ url, network })
 
-  return (
-    <a
-      {...rest}
-      href={url}
-      className={'social-icon' + (className ? ' ' + className : '')}
-      style={{ ...socialIcon, ...style }}
-      aria-label={label || networkKey}
-    >
-      <div className="social-container" style={socialContainer}>
-        <svg className="social-svg" style={socialSvg} viewBox="0 0 64 64">
-          <Background />
-          <Icon networkKey={networkKey} fgColor={fgColor} />
-          <Mask networkKey={networkKey} bgColor={bgColor} />
-        </svg>
-      </div>
-      {children}
-    </a>
+  const renderIcon = () => (
+    <div className='social-container' style={socialContainer}>
+      <svg className='social-svg' style={socialSvg} viewBox='0 0 64 64'>
+        <Background />
+        <Icon networkKey={networkKey} fgColor={fgColor} />
+        <Mask networkKey={networkKey} bgColor={bgColor} />
+      </svg>
+    </div>
   )
+
+  if (disableAnchor) {
+    return (
+      <div
+        {...rest}
+        className={'social-icon' + (className ? ' ' + className : '')}
+        style={{ ...socialIcon, ...style }}
+        aria-label={label || networkKey}
+      >
+        {renderIcon()}
+        {children}
+      </div>
+    )
+  } else {
+    return (
+      <a
+        {...rest}
+        href={url}
+        className={'social-icon' + (className ? ' ' + className : '')}
+        style={{ ...socialIcon, ...style }}
+        aria-label={label || networkKey}
+      >
+        {renderIcon()}
+        {children}
+      </a>
+    )
+  }
 }
 
 SocialIcon.propTypes = {
@@ -53,10 +71,11 @@ SocialIcon.propTypes = {
   defaultSVG: PropTypes.exact({
     icon: PropTypes.string,
     mask: PropTypes.string,
-    color: PropTypes.string,
+    color: PropTypes.string
   }),
-  style: PropTypes.PropTypes.object,
+  style: PropTypes.object,
   children: PropTypes.node,
+  disableAnchor: PropTypes.bool
 }
 
 export default SocialIcon
